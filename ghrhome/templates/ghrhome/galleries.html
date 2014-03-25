@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Galleries</title>
+</head>
+<body>
+<div>
+<ul>
+{% if galleries %}
+	{% for gallery in galleries %}
+	<li>{{ gallery.gallery_name }}</li>
+	{% endfor %}
+{% else %}
+	No gallery yet!
+{% endif %}
+</ul>
+</div>
+</body>
+<html>
