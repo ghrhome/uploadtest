@@ -1,0 +1,15 @@
+<html>
+<head>
+<title>upload photos</title>
+</head>
+<body>
+<h1>{{ gallery }}</h1>
+
+<form action="{% url "uploadphoto" %}" method="post" enctype="multipart/form-data">{% csrf_token %}
+<input type="hidden" name="gallery" value="{{gallery}}"/>
+{{form.as_p}}
+
+<p><input type="submit" value="提交"/></p>
+</form>
+</body>
+</html>
