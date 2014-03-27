@@ -1,6 +1,8 @@
 from django.db import models
-
+from mystorage import MyStorage
 # Create your models here.
+fs=MyStorage()
+
 class Gallery(models.Model):
 	gallery_name=models.CharField(max_length=100)
 	author=models.CharField(max_length=30)
@@ -9,7 +11,7 @@ class Gallery(models.Model):
 
 class Photos(models.Model):
 	photos_name=models.CharField(max_length=100)
-	photos=models.ImageField(upload_to="./media/")
+	photos=models.ImageField(upload_to="./media/",storage=fs)
 	gallery=models.ForeignKey(Gallery)
 
 

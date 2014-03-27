@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>{{ gallery.gallery_name }}</title>
+<style type="text/css">
+body{margin:0px auto; padding:0px; width:1080px; }
+ul {list-style:none; float:left;margin:0px; padding:0px;}
+.clear{clear:both;}
+a {margin:0px; padding:0px;}
+#showbox{ width:900px;margin:0px auto; float:left;padding:0px;}
+#showbox .sidebar{width:15px; height:390px; background:url("images/bg.gif") top left repeat; padding:0px; margin:0px; float:left;}
+a .showtable{width:288px; height:390px; background-color:#fff; margin:0px; padding:0px;border:solid 1px #ccc;float:left;}
+a:hover .showtable{background-color:#EAEAEA;}
+
+.showtable .imglink{width:268px; margin:10px 10px 10px 10px; height:370px; background-color:#ccc;overflow:hidden;}
+.showtable .imglink img {width:268px;}
+
+
+</style>
+</head>
+<body>
+<h1>{{ gallery.gallery_name }}</h1>
+<div id="showbox">
+
+<ul>
+{%if photos %}
+{% for photo in photos %}
+<a href="{{ photo.photos.url }}">
+<li class="showtable">
+<div class="imglink">
+<img src="{{ photo.photos.url }}" alt="{{ photo.photos_name }}" />
+</div>
+</li>
+</a>
+
+{% endfor %}
+{% else %}
+<p> no photos </p>
+
+{% endif %}
+</ul>
+
+
+<div class="clear"></div>
+</div>
+
+</body>
+</html>

@@ -1,10 +1,11 @@
-# Create your views here.
+#-*-coding:UTF-8-*-
 
+# Create your views here.
 from django.http import HttpResponse,HttpResponseRedirect
 from django.shortcuts import render_to_response,render
 from django.template import RequestContext
 import datetime
-
+from django.shortcuts import get_object_or_404
 from forms import GalleryForm, PhotoForm, PhotoFormSet
 from models import Gallery,Photos
 def testurl(request):
@@ -51,13 +52,25 @@ def uploadPhoto(request):
 			photos=form.save(commit=False)
 			photos.gallery=gallery_id
 			photos.save()
-			return HttpResponseRedirect("/ghrhome/photos/")
+			photosurl="/ghrhome/photos/?gallery="+str(gallery_id.pk)
+			return HttpResponseRedirect(photosurl)
 	else:
 		form=PhotoForm()
 	return render_to_response("ghrhome/uploadphoto.html",{'form':form,'gallery':gallery},RequestContext(request))
 
 
 def photos(request):
-	photos=Photos.objects.all()
+	if request.method=="GET":
+		try :
+			galleryId=request.GET['gallery']
+		except Exception:
+			galleryId= False
+		if galleryId:
+			galleryId=int(galleryId)
+			gallery=get_object_or_404(Gallery,pk=galleryId)
+			photos=Photos.objects.filter(gallery=galleryId)
+			return render_to_response("ghrhome/photos.html",{'gallery':gallery,'photos':photos,},RequestContext(request))
+
+		else:
 	
-	return HttpResponse(photos[2].photos.url)	
+			return HttpResponseRedirect("/ghrhome/galleries/")
