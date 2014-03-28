@@ -6,8 +6,10 @@ from django.shortcuts import render_to_response,render
 from django.template import RequestContext
 import datetime
 from django.shortcuts import get_object_or_404
-from forms import GalleryForm, PhotoForm, PhotoFormSet
+from forms import GalleryForm, PhotoForm, PhotoFormSet,UploadPhoto
 from models import Gallery,Photos
+from mystorage import handle_upload_file
+from django.views.decorators.csrf import csrf_exempt
 def testurl(request):
 	now=datetime.datetime.now()
 	html="<h1> %s </h1>" %now
@@ -24,8 +26,8 @@ def galleryform(request):
 	else:
 		
 		form=GalleryForm()
-
-	return render_to_response("ghrhome/addgalleries.html",{'form':form,},RequestContext(request))
+		form_photo=UploadPhoto()
+	return render_to_response("ghrhome/addgalleries.html",{'form':form,"form_photo":form_photo,},RequestContext(request))
 
 
 def galleries(request):
@@ -74,3 +76,11 @@ def photos(request):
 		else:
 	
 			return HttpResponseRedirect("/ghrhome/galleries/")
+@csrf_exempt
+def ajaxupload(request):
+	if request.method=="POST":
+		file=request.FILES["files[]"]
+		return handle_upload_file(file)
+
+	else:
+		return HttpResponseRedirect("/ghrhome/galleryform/")

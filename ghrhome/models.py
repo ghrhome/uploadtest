@@ -6,7 +6,8 @@ fs=MyStorage()
 class Gallery(models.Model):
 	gallery_name=models.CharField(max_length=100)
 	author=models.CharField(max_length=30)
-	
+	description=models.TextField()
+	createDate=models.DateField(auto_now_add=True)	
 	
 
 class Photos(models.Model):

@@ -6,6 +6,14 @@
 body {margin:0,auto; width:960px;background-color:#ccc; }
 
 </style>
+{{form.media}}
+
+<script src="/media/js/jquery-1.11.0.min.js"></script>
+<script src="/media/js/vendor/jquery.ui.widget.js"></script>
+<script src="/media/js/jquery.iframe-transport.js"></script>
+<script src="/media/js/jquery.fileupload.js"></script>
+<script src="/media/js/jquery.iframe-transport.js"></script>
+
 </head>
 
 
@@ -15,10 +23,39 @@ body {margin:0,auto; width:960px;background-color:#ccc; }
 {{form.as_p}}
 <input type="submit" value="submit" />
 </form>
-<script type="text/javascript">
-window.onload=function(){
-	alert("start trying");
-}
+
+<!--<form id="upload_photo" name="uploadphoto" enctype="multipart/form-data" action="/ghrhome/ajaxupload/" method="post">{%csrf_token%}
+{{ form_photo.as_p}}
+<input type="submit" value="上传图片"/>
+</form>-->
+<input id="ajaxupload" type="file" name="files[]" data-url="/ghrhome/ajaxupload/" multiple>
+<p id="image"></p>
+<script>
+		window.onload=function(){
+			$("#ajaxupload").fileupload(
+				{
+						
+				//	dataType:'application/x-www-form-urlencoded',
+					dataType:'json',
+					done:function(e,data){
+						var items=[]
+						$.each(data.result,function(key,val){
+							items.push("<p id='" +key +"'><img src=\""+val["url"]+"\"/></p>");	
+							$("<div/>",{html: items.join("") }).appendTo("#image");
+						//	$("</p>").text(val["url"]).appendTo("#image");	
+						//富文本插件功能尚未实现
+						//	var frame=frames[0].contentWindow.document.body;
+						//	alert(val["url"]);	
+						//	frame.document.execCommand("insertimage",false,val["url"]);						
+						//	$(frame).html(val["url"]);
+								});
+					}
+
+				});	
+				}
+			
+		
 </script>
 <body>
 </html>
+

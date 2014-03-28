@@ -6,4 +6,5 @@ urlpatterns = patterns('',
 	url(r'galleries/$',views.galleries,name="galleries"),
 	url(r'uploadphoto/$',views.uploadPhoto,name="uploadphoto"),
 	url(r'photos/$',views.photos,name="photos"),
+	url(r'ajaxupload/$',views.ajaxupload,name="ajaxuplaod"),
 )
