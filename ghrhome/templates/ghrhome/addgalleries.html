@@ -19,6 +19,7 @@ body {margin:0,auto; width:960px;background-color:#ccc; }
 
 <body>
 <h1>Form Test</h1>
+<p>初步实现了tinymce的富文本全功能（上传图片）但是，未完成客户端剪裁，未完成文件过滤，    设想用uploadfile实现一版，过滤功能，另外有一种思路，直接插入到iframe中，通过外部jqury+uploadfile已经实现</p>
 <form id="upload_form" enctype="multipart/form-data" aciton="galleryform" method="post">{% csrf_token %}
 {{form.as_p}}
 <input type="submit" value="submit" />
