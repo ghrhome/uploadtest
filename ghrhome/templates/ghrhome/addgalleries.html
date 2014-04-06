@@ -42,6 +42,9 @@ body {margin:0,auto; width:960px;background-color:#ccc; }
 						$.each(data.result,function(key,val){
 							items.push("<p id='" +key +"'><img src=\""+val["url"]+"\"/></p>");	
 							$("<div/>",{html: items.join("") }).appendTo("#image");
+							var mframe=$(window.frames[0].document.body);
+							console.log(mframe);
+							$("<div/>",{html:items.join("")}).appendTo(mframe);
 						//	$("</p>").text(val["url"]).appendTo("#image");	
 						//富文本插件功能尚未实现
 						//	var frame=frames[0].contentWindow.document.body;

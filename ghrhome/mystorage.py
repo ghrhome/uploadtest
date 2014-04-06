@@ -43,4 +43,26 @@ def handle_upload_file(f):
 			"url":media_url+new_file_name,})
 	response_data=simplejson.dumps(result)
 	return HttpResponse(response_data,mimetype="application/json")
+
+
+def handle_upload_file2(f):
+        media_root=settings.MEDIA_ROOT
+        media_url=settings.MEDIA_URL
+        wrapped_file=UploadedFile(f)
+        file_name=wrapped_file.name
+        ext=os.path.splitext(file_name)[1]
+        fn=time.strftime("%Y%m%d%H%M%S")
+        fn=fn+ "_%d" %random.randint(0,100)
+        new_file_name=fn+ext
+
+        with open((media_root+new_file_name),"wb+") as destination:
+                for chunk in f.chunks():
+                        destination.write(chunk)
+
+        result=[]
+        result.append({"name":new_file_name,
+                        "url":media_url+new_file_name,})
+        response_data=simplejson.dumps(result)
+	print response_data
+        return HttpResponse(response_data,mimetype="application/json")
 			

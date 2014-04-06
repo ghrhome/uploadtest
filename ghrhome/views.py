@@ -8,8 +8,12 @@ import datetime
 from django.shortcuts import get_object_or_404
 from forms import GalleryForm, PhotoForm, PhotoFormSet,UploadPhoto
 from models import Gallery,Photos
-from mystorage import handle_upload_file
+from mystorage import handle_upload_file,handle_upload_file2
 from django.views.decorators.csrf import csrf_exempt
+from django.views.generic import TemplateView
+
+class TestView(TemplateView):
+	template_name="ghrhome/test.html"
 def testurl(request):
 	now=datetime.datetime.now()
 	html="<h1> %s </h1>" %now
@@ -80,7 +84,19 @@ def photos(request):
 def ajaxupload(request):
 	if request.method=="POST":
 		file=request.FILES["files[]"]
+	#	file=request.FILES["uploadphoto"]
 		return handle_upload_file(file)
 
 	else:
 		return HttpResponseRedirect("/ghrhome/galleryform/")
+
+@csrf_exempt
+def ajaxupload2(request):
+	if request.method=="POST":
+		file=request.FILES['file']
+		
+		print file
+		return handle_upload_file2(file)
+	else: 
+		return HttpResponseRedirect("/ghrhome/galleryform/")
+

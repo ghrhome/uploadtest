@@ -7,4 +7,6 @@ urlpatterns = patterns('',
 	url(r'uploadphoto/$',views.uploadPhoto,name="uploadphoto"),
 	url(r'photos/$',views.photos,name="photos"),
 	url(r'ajaxupload/$',views.ajaxupload,name="ajaxuplaod"),
+	url(r'ajaxupload2/$',views.ajaxupload2,name="ajaxupload2"),
+	url(r'testview/$',views.TestView.as_view()),
 )
