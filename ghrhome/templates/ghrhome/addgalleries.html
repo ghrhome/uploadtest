@@ -2,23 +2,48 @@
 <html>
 <head>
 <title>Hello upload!</title>
+{{form.media}}
+<!-- Bootstrap styles -->
+<link rel="stylesheet" href="/media/css/bootstrap.min.css">
+<!-- Generic page styles -->
+<link rel="stylesheet" href="/media/css/style.css">
+<!-- CSS to style the file input field as button and adjust the Bootstrap progress bars -->
+<link rel="stylesheet" href="/media/css/jquery.fileupload.css">
 <style type="text/css">
 body {margin:0,auto; width:960px;background-color:#ccc; }
 
 </style>
-{{form.media}}
 
 <script src="/media/js/jquery-1.11.0.min.js"></script>
 <script src="/media/js/vendor/jquery.ui.widget.js"></script>
+<script src="/media/js/vendor/jquery.ui.widget.js"></script>
+<!-- The Load Image plugin is included for the preview images and image resizing functionality -->
+<script src="/media/js/load-image.min.js"></script>
+<!-- The Canvas to Blob plugin is included for image resizing functionality -->
+<script src="/media/js/canvas-to-blob.min.js"></script>
+<script src="/media/js/bootstrap.min.js"></script>
 <script src="/media/js/jquery.iframe-transport.js"></script>
+<!-- The basic File Upload plugin -->
 <script src="/media/js/jquery.fileupload.js"></script>
-<script src="/media/js/jquery.iframe-transport.js"></script>
+<!-- The File Upload processing plugin -->
+<script src="/media/js/jquery.fileupload-process.js"></script>
+<!-- The File Upload image preview & resize plugin -->
+<script src="/media/js/jquery.fileupload-image.js"></script>
+<!-- The File Upload audio preview plugin -->
+<script src="/media/js/jquery.fileupload-audio.js"></script>
+<!-- The File Upload video preview plugin -->
+<script src="/media/js/jquery.fileupload-video.js"></script>
+<!-- The File Upload validation plugin -->
+<script src="/media/js/jquery.fileupload-validate.js"></script>
 
 </head>
 
 
 <body>
 <h1>Form Test</h1>
+<p>2014.4.07---实现思路利用fileupload 上传图片，这样就可以利用fileupload 的丰富的检查功能
+   但是，好像tinymce和bootstrip冲突，界面部分解决不了。思路应该正确，先git,后面改。
+</p>
 <p>初步实现了tinymce的富文本全功能（上传图片）但是，未完成客户端剪裁，未完成文件过滤，    设想用uploadfile实现一版，过滤功能，另外有一种思路，直接插入到iframe中，通过外部jqury+uploadfile已经实现</p>
 <form id="upload_form" enctype="multipart/form-data" aciton="galleryform" method="post">{% csrf_token %}
 {{form.as_p}}
