@@ -6,69 +6,57 @@ ghrhome created by ghrhome on 14-4-7.
 
     tinymce.create('tinymce.plugins.UploadImage', {
         UploadImage: function(ed, url) {
-            var editor = ed;
-            var $ctrl=$('#tinymceupload');
+            var form,
+                iframe,
+                win,
+                throbber,
+                editor = ed,
+		$ctrl;
+
             function showDialog() {
-                   console.log("showdialog");
-              //    这里tinymceUpload激活会导致重复上传的错误；
-	     //  tinymceUpload();           
-                    $('#myModal').modal('show');
- /*这里需要利用全部上传或者全部取消来清理操作和界面 当前会发生重复上传的错误，待有空解决，已经基本实现了 利用bootstrap modal和 uploadfile验证上传的工作*/
-                    $("#progress .progress-bar").css("width","0%"); 
-              /*
-	            $("#allupload").click(function(event){
-                        if($("#files button")){
-			 $("#files button").each(function(index,val){
-                               
-                   		if($(this).text()=="Upload"){
-					$(this).trigger("click");
-				};
-                                $(this).closest("div").remove();
-  
-                         console.log($(this).text());     
-                           
-                       });
-                         }
-			$("#myModal").modal("hide");
+                win = editor.windowManager.open({
+		//这里是上传打开文件的html
+		  //  url:"/media/js/tinymce/plugins/uploadimage/tinymceupload.html",
+                    title: ed.translate('Insert an image from your computer'),
+                    width:  500 + parseInt(editor.getLang('uploadimage.delta_width', 0), 10),
+                    height: 280 + parseInt(editor.getLang('uploadimage.delta_height', 0), 10),
+                    body: [
+                      // {type: 'iframe',  url: 'javascript:void(0)'},
+			{type: 'container',html:'<div><h1>upload your image</h1><div><span class="btn btn-success fileinput-button"><i class="glyphicon glyphicon-plus"></i><span>Add files...</span><!-- The file input field used as target for the file upload widget --><input id="tinymceupload" type="file" name="file" multiple=""></span><div id="progress" class="progress"><div class="progress-bar progress-bar-success"></div></div><div id="files" class="files"></div></div></div>'},
+                       // {type: 'textbox', name: 'file', subtype:'file',multiple:'true' ,label:"选择一张图片", id:"tinymceupload"},
+                      //  {type: 'textbox', name: 'alt',  label: ed.translate('Image description')},
+		//	{type:'container',html:'<div id="tinycontainer" style="background-color:#ccc;width:200px;height:100px"><div>'},
+                     //   {type: 'container', classes: 'error', html: "<p style='color: #b94a48;'>&nbsp;</p>",id:"tinyerror" },
 
-			});
-                  */
-	   
+                        // Trick TinyMCE to add a empty div that "preloads" the throbber image
+                   //     {type: 'container', classes: 'throbber'},
+                    ],
+                    buttons: [
+                      //  {
+                     //       text: ed.translate('Insert'),
+                      //      onclick: insertImage,
+                      //      subtype: 'primary'
+                      //  },
+                        {
+                            text: ed.translate('Cancel'),
+                            onclick: ed.windowManager.close
+                        }
+                    ],
+                }, {
+                    plugin_url: url
+                });
+          //          $ctrl=$("#tinymceupload");
+	//	    console.log($ctrl.html());
+		    tinymceUpload();
 		}
-            //这些代码不应该放到onshow中，避免多次执行；
-             tinymceUpload();
-              $("#allupload").click(function(event){
-                        if($("#files button")){
-                         $("#files button").each(function(index,val){
-
-                                if($(this).text()=="Upload"){
-                                        $(this).trigger("click");
-                                };
-                                $(this).closest("div").remove();
-
-                         console.log($(this).text());
-
-                       });
-                         }
-                        $("#myModal").modal("hide");
-
-                        });
-                   $("#abortupload").click(function(){
-			if($("#files button")){
-                              $("#files button").each(function(index,val){
-                                     if($(this).text() =="Abort"){
-                                      $(this).trigger("");
-                                        }
-                                      $(this).closest("div").remove();
-                                     });
-
-		         }
-               });
-
-             function tinymceUpload(){
+	//	console.log($ctrl.html());
+                //在此绑定ctrl-uploadfile
+                /*jslint unparam: true, regexp: true */
+                /*global window, $ */
+                function tinymceUpload(){
                     'use strict';
 			console.log("testtest");
-                 //      var $ctrl=$("#tinymceupload");
+                        $ctrl=$("#tinymceupload")
 			console.log($ctrl);
                     // Change this to the location of your server-side upload handler:
                     var urlto = '/ghrhome/ajaxupload2/';
@@ -89,22 +77,18 @@ ghrhome created by ghrhome on 14-4-7.
                                     data.abort();
                                 });
                             data.submit().always(function () {
-                                //这里屏蔽$this.remove(),是因为在关闭modal的时候根据button的值来进行相关操作；
-                                $this.text("done");
-                                //$this.remove();
+                                //在此触发insertImage()方法。
+                                //insertImage();
+                                //
+                                $this.remove();
                             });
                         });
-			console.log('uploadButton OK!');
                     $ctrl.fileupload({
                         url: urlto,
                         dataType: 'json',
                         autoUpload: false,
-                        acceptFileTypes: /(\.|\/)(gif|jpe?g|png)$/,
+                        acceptFileTypes: /(\.|\/)(gif|jpe?g|png)$/i,
                         maxFileSize: 5000000, // 5 MB
-                        // The maximum width of resized images:
-                        imageMaxWidth: 600,
-                        // The maximum height of resized images:
-                        //imageMaxHeight: 300,
                         // Enable image resizing, except for Android and Opera,
                         // which actually support image resizing, but fail to
                         // send Blob objects via XHR requests:
@@ -115,7 +99,6 @@ ghrhome created by ghrhome on 14-4-7.
                         previewCrop: true
                     }).on('fileuploadadd', function (e, data) {
                             data.context = $('<div/>').appendTo('#files');
-				console.log("added");
                             $.each(data.files, function (index, file) {
                                 var node = $('<p/>')
                                     .append($('<span/>').text(file.name));
@@ -136,7 +119,6 @@ ghrhome created by ghrhome on 14-4-7.
                                     .prepend(file.preview);
                             }
                             if (file.error) {
-			        console.log('error');
                                 node
                                     .append('<br>')
                                     .append($('<span class="text-danger"/>').text(file.error));
@@ -156,7 +138,6 @@ ghrhome created by ghrhome on 14-4-7.
                             $.each(data.result, function (index, file) {
                                 //response这里是返回值
                                 if (file.url) {
-			            console.log(file);
                                     ed.execCommand('mceInsertContent', false, buildHTML2(file));
                                     ed.windowManager.close();
                                 } else if (file.error) {
@@ -181,10 +162,15 @@ ghrhome created by ghrhome on 14-4-7.
                 //ctrl绑定uploadfile--结束；
                 //重构
                 function buildHTML2(json) {
+                    var default_class = ed.getParam("uploadimage_default_img_class", "");
+                    var alt_text = getInputValue("alt");
 
-                    var imgstr = "<img src='" + json["url"] + "'/>";
+                    var imgstr = "<img src='" + json["url"] + "'";
 
-		   console.log(imgstr);
+                    if(default_class != "")
+                        imgstr += " class='" + default_class + "'";
+                    imgstr += " alt='" + alt_text + "'/>";
+
                     return imgstr;
                 }
 

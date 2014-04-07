@@ -41,39 +41,6 @@ body {margin:0,auto; width:960px;background-color:#ccc; }
 
 <body>
 <h1>Form Test</h1>
-
-<p>2014.4.08---实现了bootstrip +fileupload上传图片，tinymce网站有个很好的例子，
-是屏蔽tinymce自己的modal,从而使用boot的modal,现在总结tinymce,实现插件的基本步骤：
-
-1.使用tinymce.create定义插件
-2.其中包含插件对象方法，和edtior-tinymce启动方法（addButton,addMenuItem)
-3,tinymce.PluginManager.add 注册就好了。
-
-4.其中做插件对象方法时，如果不考虑耦合性，可以把所有方法都看成是普通js实现，
-其目的就是最终实现：  ed.execCommand('mceInsertContent', false, ‘html插入文本’）;
-                                ed.windowManager.close();
-这也是所有插件的实现方式，利用这种方式，可以相当简单的做出一个插入表情或者插入任何头像的插件。
-
-//另外，这款插件实现功能较多，同时实现了客户端剪裁，可能在兼容性上有问题。
-
-//现在已经开发好三款插件了：1，tinymce实现，2.tinymce无验证--ifrmae实现  3.bootstrap-wysiwyg实现
-
-这些应该够任何应用了
-
-//注意现在的服务器端无验证，待确认验证规范。
-
--------------------接下来工作，实现websocket通信，
-                               实现wootees设计T恤并上传，这里可以用到twitter html2canvas插件，
-实现客户端绘画。
-
-另外，已经完成了基于bootstrap的基本模版，以后要再基本模版工作。
-
----------------------------------------------------------
-
-                  另外，重中之重：要实现验证后台的开发。
-------------------------------------------------------------------------------------------。。。
-
-
 <p>2014.4.07---实现思路利用fileupload 上传图片，这样就可以利用fileupload 的丰富的检查功能
    但是，好像tinymce和bootstrip冲突，界面部分解决不了。思路应该正确，先git,后面改。
 
@@ -88,45 +55,21 @@ body {margin:0,auto; width:960px;background-color:#ccc; }
 {{ form_photo.as_p}}
 <input type="submit" value="上传图片"/>
 </form>-->
-<input id="ajaxupload" type="file" name="files[]" data-url="/ghrhome/ajaxupload/" multiple>
-<p id="image"></p>
-<!-- -->
-<!-- Modal -->
-<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title" id="myModalLabel">Modal title</h4>
-            </div>
-            <div class="modal-body">
-               <span class="btn btn-success fileinput-button">
+<h1>upload your image</h1>
+<div>
+    <span class="btn btn-success fileinput-button">
         <i class="glyphicon glyphicon-plus"></i>
         <span>Add files...</span>
         <!-- The file input field used as target for the file upload widget -->
         <input id="tinymceupload" type="file" name="file" multiple="">
     </span>
-                <div id="progress" class="progress">
-                    <div class="progress-bar progress-bar-success"></div>
-                </div>
-                <div id="files" class="files"></div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal" id="abortupload">关闭</button>
-                <button type="submit" class="btn btn-primary" id="allupload">全部上传</button>
-            </div>
-        </div><!-- /.modal-content -->
-    </div><!-- /.modal-dialog -->
-</div><!-- /.modal -->
-<!-- -->
-<script>
-// Prevent bootstrap dialog from blocking focusin
-$(document).on('focusin', function(e) {
-    if ($(e.target).closest(".mce-window").length) {
-		e.stopImmediatePropagation();
-	}
-});
-</script>
+    <div id="progress" class="progress">
+        <div class="progress-bar progress-bar-success"></div>
+    </div>
+    <div id="files" class="files"></div>
+</div>
+<input id="ajaxupload" type="file" name="files[]" data-url="/ghrhome/ajaxupload/" multiple>
+<p id="image"></p>
 <script>
 		window.onload=function(){
 			$("#ajaxupload").fileupload(
